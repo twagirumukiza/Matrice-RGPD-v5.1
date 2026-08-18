@@ -10,7 +10,7 @@
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "apikey": config.publishableKey
+        apikey: config.publishableKey
       },
       body: JSON.stringify({
         action,
@@ -18,25 +18,42 @@
       })
     });
 
-    const result = await response.json();
+    let result;
+
+    try {
+      result = await response.json();
+    } catch {
+      throw new Error("Réponse incorrecte du serveur.");
+    }
 
     if (!response.ok || result.success === false) {
-      throw new Error(result.error || "La demande n’a pas pu être enregistrée.");
+      throw new Error(
+        result.error ||
+        "La demande n’a pas pu être enregistrée."
+      );
     }
 
     return result;
   }
 
   window.RGPD_API = {
-    health: () => request("health"),
+    health() {
+      return request("health");
+    },
 
-    createLead: (data) =>
-      request("create_lead", data),
+    createLead(data) {
+      return request("create_lead", data);
+    },
 
-    saveAssessment: (data) =>
-      request("save_assessment", data),
+    saveAssessment(data) {
+      return request("submit_assessment", data);
+    },
 
-    createCommercialRequest: (data) =>
-      request("create_commercial_request", data)
+    createCommercialRequest(data) {
+      return request(
+        "create_commercial_request",
+        data
+      );
+    }
   };
 })();
