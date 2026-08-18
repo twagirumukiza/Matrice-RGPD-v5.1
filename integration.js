@@ -17,6 +17,52 @@
     return sizes[value] || undefined;
   }
 
+  function addCompanySizeField() {
+    document
+      .querySelectorAll(".commercial-dialog")
+      .forEach(function (form) {
+        if (
+          form.elements.size ||
+          form.classList.contains("pricing-dialog")
+        ) {
+          return;
+        }
+
+        const grid = form.querySelector(".lead-grid");
+
+        if (!grid) {
+          return;
+        }
+
+        const label = document.createElement("label");
+
+        label.innerHTML = `
+          Taille de l’entreprise / Company size *
+          <select name="size" required>
+            <option value="">Sélectionner / Select</option>
+            <option value="1-9">1 à 9 salariés</option>
+            <option value="10-49">10 à 49 salariés</option>
+            <option value="50-249">50 à 249 salariés</option>
+            <option value="250+">250 salariés et plus</option>
+          </select>
+        `;
+
+        grid.appendChild(label);
+      });
+  }
+
+  const companySizeObserver = new MutationObserver(
+    addCompanySizeField
+  );
+
+  companySizeObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  addCompanySizeField();
+
+  
   document.addEventListener(
     "submit",
     function (event) {
