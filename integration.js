@@ -105,6 +105,11 @@
         .then(async function (leadResult) {
           console.info("Prospect enregistré :", leadResult.leadId);
 
+          localStorage.setItem(
+            "rgpd-current-lead-id",
+            leadResult.leadId
+          );
+
           if (!isAnalysis && !isAudit) {
             return;
           }
